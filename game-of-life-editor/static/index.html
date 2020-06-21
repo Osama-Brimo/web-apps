@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOL</title>
+    <link rel="shortcut icon" href="/static/imgs/glider.png">
+    <link rel="stylesheet" href="/static/test.css">
+    <script src="https://kit.fontawesome.com/5b6f7425b1.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <!-- Message Window -->
+    <div class="messageWindow">
+        <div class="topBar">
+            <div class="windowName">
+                <!-- Shortcuts -->
+            </div>
+            <i class="fas fa-times exitWindow"></i>
+        </div>
+        <div class="windowBody">
+            <div class="entry">
+                <div class="keyboardBtn space">space</div> - Start/Stop board
+            </div>
+            <div class="entry">
+                <div class="keyboardBtn ctrl">Ctrl</div> - Hold to make selection
+            </div>
+            <div class="entry">
+                <div class="keyboardBtn ctrl">Tab</div> - Set rulebox
+            </div>
+            <div class="entry">
+                <div class="keyboardBtn alt">Alt</div> - Hold to select and zoom
+            </div>
+            <div class="entry">
+                <div class="keyboardBtn rmbBtn"> <img class="rmb" src="/static/imgs/rmb.png" alt=""> </div> - Reset Zoom
+            </div>
+            <div class="entry">
+                <div class="keyboardBtn letter">P</div> - Select pen
+            </div>
+            <div class="entry">
+                <div class="keyboardBtn letter">E</div> - Select eraser
+            </div>
+            <div class="entry">
+                <div class="keyboardBtn letter">R</div> - Randomize board
+            </div>
+            <div class="entry">
+                <div class="keyboardBtn ctrl">Ctrl</div> + <div class="keyboardBtn letter">R</div> - Randomize rules
+            </div>
+            <div class="entry">
+                <div class="keyboardBtn ctrl">Ctrl</div> + <div class="keyboardBtn ctrl">Shift</div> + <div
+                    class="keyboardBtn letter">R</div> - Reset rules
+            </div>
+            <div class="entry">
+                <div class="keyboardBtn letter">X</div> - Delete selection
+            </div>
+            <div class="entry">
+                <div class="keyboardBtn ctrl">Ctrl</div>+<div class="keyboardBtn letter">X</div> - Reset board
+            </div>
+
+            <div class="entry">
+                <div class="keyboardBtn ctrl">Ctrl</div> + <div class="keyboardBtn letter">C</div> - Copy selection
+            </div>
+
+            <div class="entry">
+                <div class="keyboardBtn ctrl">Ctrl</div> + <div class="keyboardBtn letter">V</div> - Paste selection
+            </div>
+
+            <div class="entry">
+                <div class="keyboardBtn ctrl">Ctrl</div> + <div class="keyboardBtn ctrl">Shift</div> + <div
+                    class="keyboardBtn letter">V</div> - Paste loaded pattern
+            </div>
+
+            <div class="entry">
+                <div class="keyboardBtn ctrl">Ctrl</div> + <div class="keyboardBtn letter">S</div> - Save state
+            </div>
+
+            <div class="entry">
+                <div class="keyboardBtn ctrl">Ctrl</div> + <div class="keyboardBtn ctrl">Shift</div> + <div
+                    class="keyboardBtn letter">S</div> - Load state
+            </div>
+
+            <div class="entry">
+                <div class="keyboardBtn ctrl">Ctrl</div> + <div class="keyboardBtn letter">Z</div> - Undo / Rewind one
+            </div>
+
+            <div class="entry">
+                <div class="keyboardBtn letter"><i class="fas fa-arrow-up"></i></div> / <div class="keyboardBtn letter">
+                    <i class="fas fa-arrow-down"></i></div> - Increase/Decrease pen size
+            </div>
+
+            <div class="entry">
+                <div class="keyboardBtn letter"><i class="fas fa-arrow-left"></i></div> / <div
+                    class="keyboardBtn letter"><i class="fas fa-arrow-right"></i></div> - Increase/Decrease genstep
+            </div>
+
+            <div class="entry">
+                <div class="keyboardBtn letter"><i class="fas fa-plus"></i></div> / <div class="keyboardBtn letter"><i
+                        class="fas fa-minus"></i></div> - Increase/Decrease delay
+            </div>
+
+            <!-- Welcome Message -->
+            <div class="welcomeMsg">
+
+                <div class="welcomeInfoBlock">
+                    <h2> <i class="fas fa-asterisk"></i> About:</h2>
+                    <div class="infoDesc">
+                        This is a <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank">Game
+                            of Life</a> editor with custom ruleboxes, user defined rules (<a
+                            href="https://www.conwaylife.com/wiki/Larger_than_Life" target="_blank">LtL</a> included),
+                        gen step, delays, cell appearance etc.
+                        You can also load any custom pattern by dropping a .cells file, and save any patterns you make.
+                    </div>
+                </div>
+
+                <div class="welcomeInfoBlock">
+                    <h2><i class="fas fa-asterisk"></i> Shortcuts:</h2>
+                    <div class="shortcutsInfo infoDesc">
+                        <p>
+                            - <b>Hold Ctrl</b> to make a <b>selection</b>.
+                        </p>
+                        <p>
+                            - <b>Hold Alt</b> to <b>zoom</b>.
+                        </p>
+                        <p>
+                            - Press the <b>Right Mouse Button</b> to <b>reset zoom</b>.
+                        </p>
+                    </div>
+
+                    <div class="infoDesc">
+                        There are many other shortcuts. You can check them (and view this message again) in the
+                        <b>settings tab</b>.
+                    </div>
+                </div>
+
+                <p class="warning">
+                    <i class="fas fa-exclamation-triangle"></i> Please don't proceed if you suffer from photosensitive
+                    epilepsy or are otherwise sensitive to quickly strobing/flashing patterns.
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="outermostContainer">
+
+        <!-- Controls Window -->
+        <div class="controlsContainer">
+
+            <!-- Window Toggler -->
+            <div class="toggleMenu">
+                <div class="toggleArrow">
+                    <img src="/static/imgs/arrow.png" alt="">
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <span class="tabSpan currentTab" target="mainMenu">main</span>
+                <span class="tabSpan" target="styleMenu">style</span>
+                <span class="tabSpan" target="patternMenu">patterns</span>
+                <span class="tabSpan" target="settingsMenu">settings</span>
+            </div>
+
+            <!-- Main Tab Menu -->
+            <div class="mainMenu currentMenu menu">
+                <div class="panel">
+                    <div class="rulestringDiv">
+                        <span class="descSpan">Rulestring<i class="fas fa-question-circle"></i>
+                            <div class="tooltip tooltipLow sticky">
+                                <div>
+                                    <div>A B/S notation Rulestring to use.</div>
+                                    <a href="https://www.conwaylife.com/wiki/Rulestring"
+                                        target="_blank">https://www.conwaylife.com/wiki/Rulestring</a>
+                                </div>
+                            </div>
+                        </span>
+                        <div class="inputDiv">
+                            <span class="toggleRuleType"><span class="BSRuleSpan">B/S</span></span>
+                            <input id="inputBar" rule='B/S' type="text" value="B3/S23">
+                            <select id="ruleSelect">
+                                <option value="">(Bugs)</option>
+                            </select>
+                        </div>
+                        <div class="hint">
+                            <div class="sliderInfoTriangle sliderInfo">
+
+                            </div>
+                            <div class="sliderInfoBox sliderInfo">
+                                <p>
+                                    Press <i>Enter</i> to apply the rule. <br>
+                                    You can type <i>random</i> to get a random rule <br>
+                                    or <i>default</i> to reset the rules. <br>
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="btnGroup">
+                            <div class="button lg start"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="btnGroup">
+                            <div class="button rewindOne"><i class="fas fa-step-backward"></i></div>
+                            <div class="button forwardOne"><i class="fas fa-step-forward"></i></div>
+                            <div class="button">
+                                <a class="captureImage" href="" download="game_of_life_snapshot.png">download
+                                    snapshot</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="btnGroup">
+                            <div class="button randomize">randomize</div>
+                            <div class="button clear">reset board</div>
+                        </div>
+                        <div class="btnGroup">
+                            <div class="button captureState">capture state
+                                <i class="fas fa-question-circle"></i>
+                                <div class="tooltip">
+                                    Saves the state of all cells on the board, in addition to the current rule and
+                                    generation.
+                                    <div class="tooltipShortcut">
+                                        Shortcut : Ctrl + S
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="button restoreState">restore state </div>
+                        </div>
+                    </div>
+
+
+                    <div class="panel">
+                        <div class="btnGroup spaceBetween">
+                            <div class="button tool sm draw activeTool sm selectPen"><i class="fas fa-pen"></i></div>
+                            <div class="button tool sm erase selectEraser"><i class="fas fa-eraser"></i></div>
+                            <div class="button tool sm selector"><i class="fas fa-object-group"></i></div>
+                            <div class="button tool sm zoomIn"><i class="fas fa-search-plus"></i></div>
+                        </div>
+
+                        <div class="btnGroup spaceBetween contextSelect indent1">
+                            <div class="button sm copy disabled"><i class="fas fa-copy"></i></div>
+                            <div class="button sm paste disabled"><i class="fas fa-paste"></i></div>
+                            <div class="button sm clearSelection disabled"><i class="fas fa-trash"></i></div>
+                            <div class="button sm addRuleBox disabled"> <i class="fas fa-box"></i> <i
+                                    class="fas fa-question-circle"></i>
+                                <div class="tooltip">
+                                    Add a rulebox. <br>
+                                    Causes your selection to use different rules than the rest of the board.<br>
+                                    Type the rule in the Rulestring bar.
+                                    <div class="tooltipShortcut">
+                                        Shortcut : Tab
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- Style Tab Menu -->
+            <div class="styleMenu menu">
+
+                <div class="panel">
+                    <div class="styleChoice">
+                        <div class="styleContainer">
+                            <i class="fas fa-square"></i>
+                            <div>
+                                <span class="styleSpan"> Live cell</span>
+                                <input type="text" property='fillStyle' class="colorSchemeSetting"
+                                    placeholder="rgb, rgba, hex, or keyword">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="styleChoice">
+                        <div class="styleContainer">
+                            <i class="fas fa-square"></i>
+
+                            <div>
+                                <span class="styleSpan"> Dead cell</span>
+                                <input type="text" property='canvasBg' class="colorSchemeSetting"
+                                    placeholder="rgb, rgba, hex, or keyword">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="styleChoice">
+                        <div class="styleContainer">
+                            <i class="fas fa-border-all"></i>
+
+                            <div>
+                                <span class="styleSpan"> Grid</span>
+                                <input type="text" property='strokeStyle' class="colorSchemeSetting"
+                                    placeholder="rgb, rgba, hex, or keyword">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="styleChoice">
+                        <div class="styleContainer">
+                            <i class="fas fa-font"></i>
+
+                            <div>
+                                <span class="styleSpan">Text</span>
+                                <input type="text" property='textColor' class="colorSchemeSetting"
+                                    placeholder="rgb, rgba, hex, or keyword">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="styleChoice">
+                        <div class="styleContainer">
+                            <i class="fas fa-shapes"></i>
+
+                            <div>
+                                <span class="styleSpan">Cell appearance</span>
+                                <select class="colorSchemeSetting" property='cellStyle'>
+                                    <option value="default" selected>square</option>
+                                    <option value="circle"> circle </option>
+                                    <option value="triangle"> triangle </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="button sm applyStyle">
+                        apply
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Pattern Tab Menu -->
+            <div class="patternMenu menu">
+                <div class="panel">
+
+                    <div class="patternChoice">
+
+                        <div class="button loadPattern sm">
+                            load pattern
+                        </div>
+
+                        <div class="button savePattern">
+                            save pattern
+                        </div>
+
+                        <div class="">
+                            Choose a pattern to load
+                        </div>
+
+                        <select name="" id="patternSelection">
+                            <option value="" selected disabled>--- select pattern ---</option>
+                        </select>
+
+
+                    </div>
+
+                    <div class="patternOr">
+                        - or -
+                    </div>
+
+                    <div class="patternDrop">
+                        <img src="/static/imgs/glidericon.png" alt="">
+
+                        <span class="">
+                            Drop a .cells file here
+                        </span>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+            <!-- Settings Tab Menu -->
+            <div class="settingsMenu menu">
+                <div class="panel">
+                    <div class="settingsSetting">
+                        <span>
+                            pause on tool use
+                        </span>
+                        <div class="checkbox checked" property='pauseOnToolUse'>
+                            <i class="far fa-check-square"></i>
+                        </div>
+                    </div>
+
+                    <div class="settingsSetting">
+                        <span>
+                            show coord / info
+                        </span>
+                        <div class="checkbox checked displayCanvasInfo" property='displayCanvasInfo'>
+                            <i class="far fa-check-square"></i>
+                        </div>
+                    </div>
+
+                    <div class="settingsSetting">
+                        <span>
+                            menu transparency
+                        </span>
+                        <div class="checkbox checked toggleMenuTransparency" property='menuTransparent'>
+                            <i class="far fa-check-square"></i>
+                        </div>
+                    </div>
+
+                    <div class="settingsSetting">
+                        <span>snapshot rulestring
+                        </span>
+                        <div class="checkbox checked toggleSnapshotInfo" property='snapshotInfo'>
+                            <i class="far fa-check-square"></i>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="panel">
+                    <span class="descSpan">board size<i class="fas fa-question-circle"></i>
+                        <div class="tooltip">
+                            Maximal size of the board. <br>
+                            <br>
+                            Note that large sizes and large populations make the application much slower.<br>
+                            <br>
+                            <b>Changing the size of the board resets it!</b>
+                        </div>
+                    </span>
+
+
+
+                    <div class="sliderBg">
+                        <div class="slider boardSizeSlider" property='setBoardSize' value='600' min='100' max='3000' step='50'
+                            defaultVal='600' unit=' cells'>
+                            <div class="valueFill"></div>
+                            <div class="sliderKnob"></div>
+                            <div class="sliderInfoTriangle sliderInfo"></div>
+                            <div class="sliderInfoBox sliderInfo"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <span class="descSpan">randomization desnity<i class="fas fa-question-circle"></i>
+                        <div class="tooltip">
+                            Percentage of the board to populate when randomizing.
+                        </div>
+                    </span>
+                    <div class="sliderBg">
+                        <div class="slider randomSlider" property='setRandomizationDensity' value='1' min='1' max='30'
+                            step='1' defaultVal='7' unit='%'>
+                            <div class="valueFill">
+
+                            </div>
+                            <div class="sliderKnob">
+
+                            </div>
+                            <div class="sliderInfoTriangle sliderInfo">
+
+                            </div>
+                            <div class="sliderInfoBox sliderInfo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <span class="descSpan">pointer size<i class="fas fa-question-circle"></i>
+                        <div class="tooltip">
+                            Spread of pointer from the center to all directions. <br> A size of 1 indicates no
+                            spread.
+                            <div class="tooltipShortcut">
+                                Shortcut : <i class="fa fa-arrow-up" aria-hidden="true"></i> / <i
+                                    class="fa fa-arrow-down" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </span>
+
+
+
+                    <div class="sliderBg">
+                        <div class="slider toolSlider" property='setPointerSize' value='1' min='1' max='8' step='1'
+                            defaultVal='1' unit=''>
+                            <div class="valueFill"></div>
+                            <div class="sliderKnob"></div>
+                            <div class="sliderInfoTriangle sliderInfo"></div>
+                            <div class="sliderInfoBox sliderInfo"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <span class="descSpan">delay<i class="fas fa-question-circle"></i>
+                        <div class="tooltip">
+                            Amount of delay between each generation and the next, in milliseconds. <br>
+                            <div class="tooltipShortcut">
+                                Shortcut : + / -
+                            </div>
+                        </div>
+                    </span>
+
+
+                    <div class="sliderBg">
+                        <div class="slider delaySlider" property='setDelay' value='0' min='0' max='1000' step='10'
+                            defaultVal='0' unit='ms'>
+                            <div class="valueFill">
+
+                            </div>
+                            <div class="sliderKnob">
+
+                            </div>
+                            <div class="sliderInfoTriangle sliderInfo">
+
+                            </div>
+                            <div class="sliderInfoBox sliderInfo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="panel">
+                    <span class="descSpan">Genstep<i class="fas fa-question-circle"></i>
+                        <div class="tooltip">
+                            Amount of generations calculated per frame.
+                            <div class="tooltipShortcut">
+                                Shortcut : <i class="fa fa-arrow-left" aria-hidden="true"></i> / <i
+                                    class="fa fa-arrow-right" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </span>
+
+
+
+                    <div class="sliderBg">
+                        <div class="slider genStepSlider" property='setGenStep' value='1' min='1' max='30' step='1'
+                            defaultVal='1' unit=' gen(s)'>
+                            <div class="valueFill"></div>
+                            <div class="sliderKnob"></div>
+                            <div class="sliderInfoTriangle sliderInfo"></div>
+                            <div class="sliderInfoBox sliderInfo"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="panel showMsg showShortcuts" msgType='shortcuts'>
+                    <i class="fas fa-info-circle"></i>
+                    <span>Show keyboard shortcuts</span>
+                </div>
+
+                <div class="panel showMsg showWelcome" msgType='welcome'>
+                    <i class="fas fa-info-circle"></i>
+                    <span>Show Welcome Message</span>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Canvases -->
+        <div class="canvasContainer">
+            <div class="canvasInfo menuExpandedInfo">
+                <canvas id='genCounter' class="" width="400" height="90"></canvas>
+                <canvas id='coords' class="" width="400" height="90"></canvas>
+            </div>
+            <canvas id="flashCanvas" width="300" height="100"></canvas>
+            <canvas id="touchCanvas" width="800" height="600" oncontextmenu="return false;"></canvas>
+            <canvas id="drawCanvas" width="800" height="600">
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script type="module" src="/static/utilities.js"></script>
+    <script type="module" src="/static/logic.js"></script>
+    <script type="module" src="/static/script.js"></script>
+    <script type="module" src="/static/patterns.js"></script>
+    <script type="module" src="/static/canvas.js"></script>
+</body>
+</html>

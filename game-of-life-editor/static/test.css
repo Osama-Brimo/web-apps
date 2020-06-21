@@ -1,0 +1,842 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    font-size: 1vw;
+    font-family: monospace;
+    color: black;
+}
+
+.canvasContainer {
+    position: relative;
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+canvas {
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.canvasInfo canvas {
+    position: relative;
+    z-index: 2;
+    max-width: 45%;
+}
+
+.canvasInfo {
+    z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 100%;
+    transition-duration: 400ms;
+}
+
+.menuExpandedInfo {
+    width: 73%;
+}
+
+#touchCanvas {
+    z-index: 2;
+}
+
+
+#flashCanvas {
+    z-index: 1;
+}
+
+
+.outermostContainer {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    flex-direction: row-reverse;
+}
+
+.controlsContainer {
+    transition-duration: 400ms;
+    height: 100vh;
+    padding: 0.5rem;
+    width: 25vw;
+    position: absolute;
+    z-index: 4;
+    background-color: rgba(255, 255, 255, 0.25);   
+    backdrop-filter: blur(3px);
+    display: flex;
+    justify-content: center;
+}
+
+.toggleMenu {
+    position: absolute;
+    width: 2vw;
+    min-width: 15px;
+    height: 100%;
+    z-index: 4;
+    left: -2vw;
+    top: 0;
+    box-sizing: border-box;
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.toggleArrow img  {
+    max-width: 100%;
+}
+
+.line {
+    height: 20px;
+    width: 4px;
+    background-color: silver;
+    margin-right: 3px;
+}
+
+.controlsContainer button {
+    width: 30%;
+    height: 10%;
+}
+
+.button {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 1vw;
+    cursor: pointer;
+    min-width: 4.3vw;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 2.5%;
+    padding-left: 4%;
+    padding-right: 4%;
+    border: 2px solid rgba(130, 130, 130, 0.25);
+    border-radius: 0.3vw;
+    background-color: rgba(165, 165, 165, 0.3);
+    text-align: center;
+    margin: 0.3vw;
+    font-family: monospace;
+    color: rgba(0,0,0,0.65);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.button i:not(.fa-question-circle){
+    font-size: 1.7vw;
+    opacity: 1 !important;
+}
+
+.sm { 
+    width: 12%;
+}
+
+.lg {
+    width: 100%;
+}
+
+.panel {
+    border-radius: 7px;
+    margin: 1.1vw 0.5vw;
+    position: relative;
+    width: 95%;
+}
+
+.btnGroup {
+    background-color: whitesmoke;
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    padding: 0.4vw; 
+    /* negative margin gives appearance of one big rounded block
+    by hiding the rounding of each div by overlapping them.*/
+    margin: -5px;
+    border-radius: 5px;
+}
+
+.spaceBetween {
+    justify-content: space-between;
+}
+
+.indent1 {
+    margin-left: 0.5vw;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    padding: 1vw;
+}
+
+.option span {
+    margin-right: 0.5vw;
+}
+
+#inputBar {
+    border-radius: 3px;
+    border: none;
+    height: 3.5vh;
+    text-align: center;
+    width: 95%;
+}
+
+.rulestringDiv {
+    margin-bottom: 1rem;
+    font-size: 0.7vw;
+    padding: 0.35vw;
+    background-color: whitesmoke;
+    border-radius: 7px;
+    position: relative;
+}
+
+.descSpan {
+    border-radius: 5px;
+    background-color: whitesmoke;
+    padding: 5px 5px 0 5px;
+    position: absolute;
+    top: -16px;
+    margin-left: 5px;
+    font-size: 0.85vw;
+}
+
+.slider {
+    /* border: 1px solid red; */
+    width: 20vw;
+    height: 4px;
+    min-width: 15vw;
+    position: relative;
+    border-radius: 10px;
+    background-color: white;
+    padding: 1.5px;
+}
+
+.valueFill {
+    padding: 1px;
+    border-radius: 10px;
+    height: 100%;
+    width: 0px;
+    background-color: dodgerblue;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+.sliderKnob {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    bottom: -3.5px;
+    left: 0;
+    background-color: rgb(192, 192, 192);
+    padding: 1px;
+    cursor: grab;
+}
+
+.sliderInfo {
+    opacity: 0;
+    /* display: none; */
+    transition-duration: 250ms;
+    z-index: -1;
+}
+
+.sliderInfoBox {
+    background-color: dodgerblue;
+    min-width: fit-content;
+    max-width: 2.5vw;
+    width: 1.5vw;
+    height: auto;
+    padding: 5px;
+    position: absolute;
+    top: 20px;
+    left: -13px;
+    transform: skew(3deg, 3deg);
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    font-size: 0.8vw;
+}
+
+.sliderInfoTriangle {
+    border: 5px solid transparent;
+    position: absolute;
+    top: 11px;
+    background-color: transparent;
+    transform: skew(-25deg, 0deg);
+    border-bottom: 5px solid dodgerblue;
+}
+
+.colorSchemeSetting {
+    margin: 1rem;
+}
+
+.active {
+    border: 2px solid rgba(30, 144, 255, 0.5);
+}
+
+.activeTool {
+    background-color: silver;
+    border: 2px solid rgba(30, 144, 255, 0.5);
+}
+
+.hidden {
+    width: 0%;
+    padding: 0;
+    margin: 0;
+    font-size: 0px;
+}
+
+.disabled {
+    cursor: default;
+    opacity: 0.3;
+}
+
+.menu {
+    display: none;
+    position: relative;
+    margin-top: 3.5rem;
+    width: 100%;
+}
+
+.tabs {
+    border-bottom: 0.35vw solid silver;
+    border-radius: 3px;
+    color: black;
+    opacity: 0.8;
+    margin-top: 0rem;
+    position: absolute;
+    top: 0;
+    font-weight: bold;
+    line-height: 2vw;
+    font-size: 0.83vw;
+    cursor: pointer;
+    display: flex;
+    justify-content: start;
+    max-width: 90%;
+}
+
+.tabSpan {
+    border: 1vw solid transparent;
+    border-bottom: 2vw solid whitesmoke;
+    box-sizing: border-box;
+    transition-duration: 100ms;
+    height: 23px;
+    display: flex;
+    justify-content: center;
+    max-width: 29%;
+}
+
+.currentTab {
+    display: flex !important;
+    z-index: 999;
+    border-bottom: 2vw solid silver;
+    font-style: italic;
+}
+
+.currentMenu {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.patternMenu .panel {
+    max-width: 95%;
+    padding: 10px;
+}
+
+.patternMenu div {
+    width: 100%;
+    margin: 1vh 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.patternMenu select {
+    width: 50%;
+}
+
+.patternChoice {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: whitesmoke;
+    font-size: 1.1vw;
+    padding: 10px;
+    max-width: 95%;
+    border-radius: 7px;
+}
+
+.patternOr {
+    font-size: 1.1vw;
+    font-style: italic;
+}
+
+.patternOr div {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.patternDrop {
+    border: 7px dashed silver;
+    border-radius: 7px;
+    position: relative;
+    max-width: 95%;
+    height: 60%;
+    padding: 5px;
+    text-align: center;
+}
+
+.patternDrop span {
+    position: absolute;
+    top: 45%;
+    left: 20%;
+    font-size: 1.1vw;
+}
+
+.patternDrop img {
+    width: 100%;
+    height: 100%;
+    opacity: 0.08;
+    border-radius: 7px;
+}
+
+
+.contextSelect {
+    background-color: whitesmoke;
+    transition-duration: 250ms;
+    opacity: 0;
+    transform: translateX(-20px);
+    margin-bottom: 2rem;
+}
+
+.contextSelectText {
+    font-size: small;
+    position: absolute;
+    border-radius: 10px;
+    padding: 5px;
+    top: 10px;
+}
+
+.sliderBg {
+    background-color: whitesmoke;
+    display: flex;
+    justify-content: center;
+    width: 95%;
+    max-width: 100%;
+    padding: 0.5vw; 
+    height: 8px;
+    border-radius: 5px;
+}
+
+.addRuleBox {
+    font-size: 0.66vw;
+    font-weight: bold;
+}
+
+.styleMenu .panel {
+    background-color: whitesmoke;
+    border-radius: 7px;
+    padding: 1vw 0 1vw 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.styleChoice {
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    align-items: center;
+}
+
+.styleChoice input {
+    width: 90%;
+    padding: 3px;
+    border-radius: 3px;
+    border: 1.2px solid silver;
+}
+
+select {
+    width: 90%;
+    border: 1.2px solid silver;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+
+.styleContainer {
+    display: flex;
+    width: 90%;
+}
+
+.styleContainer div {
+    padding-top: 5px;
+}
+
+.settingsMenu {
+    padding: 0.5vw;
+}
+
+.styleChoice i{
+    opacity: 1 !important;
+    /* display: block; */
+    /* width: 45%; */
+    text-align: start;
+    font-size: 2vw !important;
+    margin-right: 1vw;
+}
+
+.settingsMenu .panel:first-of-type {
+    background-color: whitesmoke;
+    font-weight: bold;
+}
+
+.settingsSetting {
+    display: flex;
+    justify-content: space-evenly;
+    width: 90%;
+    margin: 1vw;
+}
+
+.checkbox {
+    cursor: pointer;
+    font-size: 1.2vw;
+}
+
+
+.fa-question-circle {
+    opacity: 0.3;
+    margin-left: 5px;
+    font-size: 0.8vw;
+    transition-duration: 100ms;
+}
+
+.fa-question-circle:hover {
+    opacity: 1;
+}
+
+.tooltip {
+    display: none;
+   border: 1.5px solid black;
+   position: absolute;
+   transition-duration: 200ms;
+   bottom: 90%;
+   right: 20px;
+   z-index: -1;
+   background-color: white;
+   opacity: 0;
+   padding: 10px;
+   font-size: 0.8rem;
+   font-weight: normal;
+   width: fit-content;
+   min-width: 12vw;
+   text-align: start;
+}
+
+.tooltipLow {
+    bottom: auto;
+    top: 90%
+}
+
+.tooltipShortcut {
+    background-color: whitesmoke;
+    margin: 10px;
+    margin-left: 0;
+    border-radius: 3px;
+    padding: 5px;
+    font-weight: bold;
+    font-style: italic;
+    text-align: center;
+}
+
+.hint div {
+    display: none;
+    transform: skew(0deg);
+    max-width: 100%;
+    font-size: 0.6vw;
+    z-index: 4;
+    margin-left: 7vw;
+    margin-top: 20px;
+}
+
+.hint .sliderInfoBox {
+    background-color: dodgerblue;
+    padding: 0.3rem 0.75rem;
+    border-radius: 7px;
+    z-index: 4;
+
+}
+
+.hint .sliderInfoTriangle {
+    border-bottom: 10px solid dodgerblue;
+    z-index: 4;
+
+}
+
+.hint p {
+    text-align: justify;
+}
+
+
+.dnone {
+    display: none;
+}
+
+.messageWindow {
+    background-color: white;
+    display: none;
+    border: 2px solid black;
+    width: 75vw;
+    height: 80vh;
+    position: absolute;
+    z-index: 999;
+    left: 15vw;
+    top: 5vh;
+
+    padding: 2px;
+
+    opacity: 0;
+
+    transition-duration: 200ms;
+
+    flex-direction: column;
+
+    box-sizing: border-box;
+
+
+}
+
+.topBar {
+    height: 10%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 3vw;
+    background-color: whitesmoke;
+    z-index: -1;
+}
+
+.windowName {
+    font-size: 3vw;
+    font-weight: bold;
+}
+
+.topBar i {
+    font-size: 1.5vw;
+    opacity: 1;
+    cursor: pointer;
+}
+
+.windowBody {
+    box-sizing: border-box;
+
+    height: 90%;
+    width: 100%;
+    padding: 2vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    flex-wrap: wrap;
+}
+
+.windowBody p {
+    margin-bottom: 5vh;
+}
+
+
+.keyboardBtn {
+    height: 1.5vw;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    font-size: 0.75vw;
+    padding: 3px;
+    display: flex;
+    background-color: whitesmoke;
+    font-weight: bold;
+    cursor: default;
+    margin: 0 1vw;
+}
+
+.keyboardBtn i {
+    opacity: 1 !important;
+    margin: 0 !important;
+}
+
+.entry {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5vw;
+    display: none;
+}
+
+.warning {
+    background-color: tomato;
+    border-radius: 3px;
+    padding: 10px;
+    color: white;
+    font-weight: bold;  
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    margin-top: 2vw;
+}
+
+.warning i {
+    opacity: 1;
+    font-size: larger;
+    margin-right: 1vw;
+}
+
+.space {
+    width: 8vw;
+}
+
+.ctrl {
+    width: 2.3vw;
+    align-items: center;
+}
+
+.alt {
+    width: 1.5vw;
+    align-items: center;
+    justify-content: center;
+}
+
+.letter {
+    align-items: center;
+    justify-content: center;
+    width: 1.5vw;
+}
+
+.showShortcuts, .showWelcome {
+    font-size: 1.1vw;
+    border-radius: 3px;
+    padding: 0.5vw;
+    cursor: pointer;
+    width: fit-content;
+}
+
+.showShortcuts i, .showWelcome i {
+    font-size: 1vw;
+    opacity: 1;
+}
+
+.welcomeMsg {
+    display: none;
+}
+
+.patternIcon {
+    width: 5vw;
+}
+
+.inputDiv {
+    display: flex;
+}
+
+.rulestringDiv .tooltip div {
+    margin: 10px;
+}
+
+.toggleRuleType {
+    /* position: absolute; */
+    background-color: whitesmoke;
+    height: 3.8vh;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10%;
+    overflow: hidden;
+    font-weight: bold;
+    color: tomato;
+    transition-duration: 150ms;
+    cursor: pointer;
+    font-size: 0.7vw;
+    left: 0;
+    bottom: 15%;
+}
+
+.notation {
+    font-style: italic;
+    background-color: whitesmoke;
+    padding: 4px;
+    width: fit-content;
+}
+
+.rmbBtn {
+    width: 2.5vw;
+    height: 2.5vw;
+
+}
+
+.rmb {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.welcomeInfoBlock {
+    font-size: 1.2vw;
+}
+
+.infoDesc {
+    margin: 2.6vh 0 1vh 3vw;
+}
+
+.welcomeInfoBlock .fa-asterisk {
+    font-size: 1.2vw;
+}
+
+.shortcutsInfo p {
+    margin: 6px 0 6px 0;
+}
+
+.dropDown {
+    position: absolute;
+    bottom: 25%;
+    right: 5%;
+    font-size: 1vw;
+    cursor: pointer;
+}
+
+#ruleSelect {
+    width: 30%;
+    border: none;
+    font-size: 1vw;
+    font-weight: bold;
+    font-style: italic;
+    color: tomato;
+    font-family: monospace;
+    background-color: whitesmoke;
+}
+
+.settingsSetting {
+    display: flex;
+    justify-content: space-around;
+    text-align: left;
+}
+
+.settingsSetting span {
+    font-size: 0.85vw;
+    width: 9vw;
+}
+
+.captureImage {
+    text-decoration: none;
+    color: black;
+}
